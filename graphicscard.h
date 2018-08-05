@@ -19,8 +19,36 @@ class GraphicsCard : public QWidget
         Inactive,
     };
 
+    enum class CardState{
+        Enabled,
+        Disabled,
+    };
+
 public:
     explicit GraphicsCard(QWidget *parent = nullptr);
+    void setCardName(QString name);
+
+        void expand();
+
+        void contract();
+
+        void setSpeed(double rate);
+
+        void setArmed(bool armed);
+
+        void setDotColor(MinerConnection con);
+
+        void setStarted(bool val);
+
+        void setHighlight(bool val);
+
+        void setMinerProcess(MinerProcess* process);
+
+        void startMining();
+
+        void stopMining();
+
+        void setColor(MinerConnection status);
 
 private:
     QVBoxLayout *mainLayout;
@@ -31,13 +59,20 @@ private:
     QLabel *statusLabel, *poolLabel, *speedLabel;
     QCheckBox *box;
     MinerChart *graphHolder;
+    bool armed=false, mining=false;
+    MinerProcess* process;
+    MinerChart * info;
+    QColor color;
+    CardState state;
 
 
 
     void configureUI();
+    void configureConnections();
 	void configureStyleSheet();
 
 signals:
+    void cardStatus(CardState state);
 
 public slots:
 };

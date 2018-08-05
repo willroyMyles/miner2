@@ -52,7 +52,7 @@ private:
 
     QWidget *dashPage, *settingsPage, *blogPage, *aboutPage;
     QPushButton *dashBtn, *settingsBtn, *blogBtn, *aboutBtn;
-    QPushButton *startBtn;
+    QPushButton *startBtn, *confirmBtn, *cancelBtn;
     GraphicsCard *card;
 
     QScrollArea *scrollArea;
@@ -82,6 +82,7 @@ private:
 
     
 
+    void resetSettings();
 signals:
     void indexChanged(int);
 

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QStyledItemDelegate>
 #include <QComboBox>
+#include <QMessageBox>
 
 MinerUI::MinerUI(QWidget *parent)
     : QWidget(parent)
@@ -159,18 +160,10 @@ void MinerUI::configureSettings()
         font.setBold(true);
         settingsLabel->setFont(font);
 
-        auto confirm = new QPushButton("Confirm");
-        auto CancelBtn = new QPushButton("Cancel");
-        confirm->setObjectName(QStringLiteral("bottomBtn"));
-        CancelBtn->setObjectName(QStringLiteral("bottomBtn"));
-
-        connect(confirm, &QPushButton::clicked, [=]() {
-            this->saveAndApplySettings();
-        });
-        connect(CancelBtn, &QPushButton::clicked, [=]() {
-            this->restoreSettings();
-        });
-
+        confirmBtn = new QPushButton("Confirm");
+        cancelBtn = new QPushButton("Cancel");
+        confirmBtn->setObjectName(QStringLiteral("bottomBtn"));
+        cancelBtn->setObjectName(QStringLiteral("bottomBtn"));
 
         auto walletLabel = new QLabel("Wallet Id ");
         auto password = new QLabel("Password ");
@@ -222,8 +215,8 @@ void MinerUI::configureSettings()
         passwordLayout->addWidget(passwordEdit);
         identifierLayout->addWidget(identifier);
         identifierLayout->addWidget(identifierEdit);
-        buttonLayout->addWidget(confirm);
-        buttonLayout->addWidget(CancelBtn);
+        buttonLayout->addWidget(confirmBtn);
+        buttonLayout->addWidget(cancelBtn);
         currencyLayout->addWidget(currencyLabel);
         currencyLayout->addWidget(currency);
 
@@ -303,6 +296,34 @@ void MinerUI::configureConnections()
         case 3:
             break;
         }
+    });
+
+    connect(confirmBtn, &QPushButton::clicked, [=]() {
+        this->saveAndApplySettings();
+    });
+    connect(cancelBtn, &QPushButton::clicked, [=]() {
+        this->resetSettings();
+    });
+
+    connect(startBtn, &QPushButton::clicked, [=](){
+        if (!mining) {
+                    QDir basePath = QDir(QCoreApplication::applicationDirPath());
+                    auto xmrPath = QDir::cleanPath(basePath.absolutePath() + QDir::separator() + "xmr-stak/xmr-stak.exe");
+                    if (!QFile::exists(xmrPath)) {
+
+        #if defined QT_DEBUG
+                        QMessageBox::warning(this, "xmrstak not found!", "xmrstak is missing or hasnt been compiled.");
+        #else
+                        QMessageBox::warning(this, "xmrstak not found!", "xmrstak is missing");
+        #endif
+                        return;
+                    }
+                    startMining();
+                }
+                else {
+                    stopMining();
+                }
+
     });
 
 }
@@ -386,6 +407,18 @@ void MinerUI::saveAndApplySettings()
     if (isMining()) {
         restartMining();
     }
+}
+
+void MinerUI::resetSettings()
+{
+    walletIdText = settingsMan->getValue("wallet_id", Constants::MINER_DEFAULT_WALLET_ID).toString();
+    walletEdit->setText(walletIdText);
+    poolText = settingsMan->getValue("pool", Constants::MINER_DEFAULT_POOL).toString();
+    poolEdit->setText(poolText);
+    passwordText = settingsMan->getValue("password", "").toString();
+    passwordEdit->setText(passwordText);
+    identifierText = settingsMan->getValue("identifier", "").toString();
+    identifierEdit->setText(identifierText);
 }
 
 void MinerUI::restoreSettings()
