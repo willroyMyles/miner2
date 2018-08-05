@@ -1,5 +1,6 @@
 #include "graphicscard.h"
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 
 GraphicsCard::GraphicsCard(QWidget *parent) : QWidget(parent)
 {
@@ -10,7 +11,6 @@ GraphicsCard::GraphicsCard(QWidget *parent) : QWidget(parent)
 void GraphicsCard::configureUI()
 {
     setObjectName(QStringLiteral("card"));
-    setStyleSheet("#card{background:rgba(200,200,2,1); border: 1px solid red; border-radius: 2px;}");
 
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setMinimumWidth(500);
@@ -20,7 +20,7 @@ void GraphicsCard::configureUI()
     infoLayout = new QHBoxLayout;
     statusLayout = new QVBoxLayout;
     cardName = new QLabel("card name");
-    graphHolder = new QWidget;
+    graphHolder = new MinerChart;
     statusLabel = new QLabel("Inactive");
     poolLabel = new QLabel("pool : ");
     speedLabel = new QLabel("speed: ");
@@ -28,23 +28,29 @@ void GraphicsCard::configureUI()
     nameHolder = new QWidget;
     nameHolderlayout = new QVBoxLayout;
 	infoHolder = new QWidget;
+    auto widget = new QWidget;
+    widget->setLayout(mainLayout);
+    widget->setObjectName("widget");
+
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
+    effect->setBlurRadius(20);
+    effect->setXOffset(0);
+    effect->setYOffset(0);
+    effect->setColor(QColor(0, 0, 0, 200));
+    widget->setGraphicsEffect(effect);
 
     nameHolder->setLayout(nameHolderlayout);
     nameHolderlayout->addWidget(cardName);
     nameHolderlayout->setContentsMargins(0,0,0,0);
     nameHolderlayout->setSizeConstraint(QLayout::SetFixedSize);
 
-
     graphHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     nameHolder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-
-    setLayout(mainLayout);
     statusLayout->addWidget(statusLabel);
     statusLayout->addWidget(speedLabel);
     statusLayout->addWidget(poolLabel);
     statusLayout->addWidget(box);
-
 
     infoLayout->addWidget(graphHolder);
     infoLayout->addLayout(statusLayout);
@@ -52,10 +58,16 @@ void GraphicsCard::configureUI()
 
     mainLayout->addWidget(nameHolder);
 	mainLayout->addWidget(infoHolder);
-   // mainLayout->addLayout(statusLayout);
+
+    auto layout = new QVBoxLayout;
+    layout->addWidget(widget);
+    setLayout(layout);
 }
 
 void GraphicsCard::configureStyleSheet()
 {
-	infoHolder->setStyleSheet("background:rgba(33,33,33,1);");
+    this->setStyleSheet("QLabel{color:rgba(200,200,200,1); border: none; border-radius: 2px;}"
+                        "#widget{background:rgba(33,33,33,.3); }"
+                        "");
+
 }

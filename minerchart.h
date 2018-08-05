@@ -10,6 +10,8 @@ For more information see the LICENSE file
 *************************************************************************/
 
 #pragma once
+#include "minerprocess.h"
+
 #include <qwidget.h>
 #include <qpainter.h>
 
@@ -30,6 +32,9 @@ public:
 			});
 		}
 		*/
+            this->setStyleSheet("background: url(:/grid.png);"
+                                "background-repeat: repeat-x;"
+                                "");
 	}
 
 	void paintEvent(QPaintEvent* evt)
@@ -39,7 +44,7 @@ public:
 		painter.setRenderHint(QPainter::Antialiasing);
 		painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
-		painter.fillRect(QRect(0, 0, this->width(), this->height()), QBrush(QColor(30, 30, 30)));
+        painter.fillRect(QRect(0, 0, this->width(), this->height()), QBrush(QColor(30, 30, 30, 0)));
 	
 		if (data.size() <= 1)
 			return;

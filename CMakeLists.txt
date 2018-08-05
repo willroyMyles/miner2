@@ -3,6 +3,7 @@ project(JahMiner)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+#set(CMAKE_PREFIX_PATH "/Users/willroymyles/Qt/5.9.4/clang_64")
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets Network)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -88,7 +89,8 @@ if(BUILD_MINER_AS_LIB)
         ${HEADERS_moc})
 else()
     qt5_add_resources(QRCS
-    ${CMAKE_SOURCE_DIR}/fonts.qrc
+        ${CMAKE_SOURCE_DIR}/fonts.qrc
+        ${CMAKE_SOURCE_DIR}/images.qrc
 )
     set(HEADERS autominer.h constants.h cuda_gpu_list.h graphicscard.h minerchart.h minerui.h qtawesome.h qtawesomeanim.h settingsmanager.h minerprocess.h)
     add_executable(JahMiner WIN32 ${QRCS} main.cpp autominer.cpp constants.cpp cuda_gpu_list.cu graphicscard.cpp minerchart.cpp minerui.cpp qtawesome.cpp qtawesomeanim.cpp settingsmanager.cpp minerprocess.cpp  ${HEADERS_moc})

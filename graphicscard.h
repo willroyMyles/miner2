@@ -1,6 +1,8 @@
 #ifndef GRAPHICSCARD_H
 #define GRAPHICSCARD_H
 
+#include "minerchart.h"
+
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -25,9 +27,10 @@ private:
     QVBoxLayout *statusLayout, *nameHolderlayout;
     QHBoxLayout *infoLayout;
     QLabel *cardName;
-    QWidget *graphHolder, *nameHolder, *infoHolder;
+    QWidget *nameHolder, *infoHolder;
     QLabel *statusLabel, *poolLabel, *speedLabel;
     QCheckBox *box;
+    MinerChart *graphHolder;
 
 
 

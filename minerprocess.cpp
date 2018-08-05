@@ -10,7 +10,7 @@ For more information see the LICENSE file
 *************************************************************************/
 
 
-#include <CL/cl.h>
+#include <OpenCL/cl.h>
 
 #include <QTimer>
 #include <QJsonDocument>
