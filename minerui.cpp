@@ -11,6 +11,8 @@ MinerUI::MinerUI(QWidget *parent)
 {
     configureUI();
     configureConnections();
+//	configureStyleSheet();
+	configureFontIcons();
 }
 
 MinerUI::~MinerUI()
@@ -60,6 +62,15 @@ void MinerUI::configureUI()
     settingsBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     aboutBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
 
+	dashBtn->setCheckable(true);
+	settingsBtn->setCheckable(true);
+	blogBtn->setCheckable(true);
+	aboutBtn->setCheckable(true);
+	dashBtn->setAutoExclusive(true);
+	settingsBtn->setAutoExclusive(true);
+	blogBtn->setAutoExclusive(true);
+	aboutBtn->setAutoExclusive(true);
+
     scrollContents->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);
 
     buttonHolder->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);
@@ -74,8 +85,8 @@ void MinerUI::configureUI()
 
     setLayout(mainLayout);
     mainLayout->addLayout(topLayout);
-    topLayout->addLayout(leftLayout);
-    topLayout->addLayout(rightLayout);
+	topLayout->addLayout(leftLayout);
+	topLayout->addWidget(stack);
 
     buttonLayout->addWidget(dashBtn);
     buttonLayout->addWidget(settingsBtn);
@@ -87,7 +98,7 @@ void MinerUI::configureUI()
     buttonHolder->setLayout(buttonLayout);
     leftLayout->addWidget(buttonHolder);
 
-    rightLayout->addWidget(stack);
+   // rightLayout->addWidget(stack);
 
     stack->addWidget(dashPage);
     stack->addWidget(settingsPage);
@@ -102,11 +113,13 @@ void MinerUI::configureUI()
     gripLayout->addWidget(adminLabel);
     gripLayout->addWidget(new QSizeGrip(this));
 
+	mainLayout->addWidget(startBtn);
     mainLayout->addWidget(gripHolder);
 
     mainLayout->setContentsMargins(1,1,1,1);
 
     configureDash();
+	configureSettings();
 
 }
 
@@ -126,15 +139,9 @@ void MinerUI::configureDash()
 
 void MinerUI::configureSettings()
 {
-        auto settingsWidget = new QWidget;
         auto settingsLaout = new QVBoxLayout;
-        //settingsLaout->setContentsMargins(10, 6, 10,4 );
         settingsLaout->setSpacing(10);
-        settingsWidget->setLayout(settingsLaout);
-        settingsWidget->setObjectName(QStringLiteral("settingsWidget"));
-
-
-
+       
         auto settingsLabel = new QLabel("SETTINGS");
     //	settingsLabel->setAlignment(Qt::AlignHCenter);
         QFont font = settingsLabel->font();
@@ -235,6 +242,8 @@ void MinerUI::configureSettings()
         minerMan->password = passwordText;
         minerMan->identifier = identifierText;
 
+		settingsPage->setLayout(settingsLaout);
+
 }
 
 void MinerUI::configureBlog()
@@ -267,6 +276,57 @@ void MinerUI::configureConnections()
     });
 
 }
+
+void MinerUI::configureStyleSheet() {
+	
+
+	setStyleSheet("*{color:rgba(255,255,255); background:rgba(33,33,33,1);}"
+		"QGroupBox, #settingsWidget{ background: rgba(33,33,33,1); margin:0px; padding : 0px; border: 0px solid black; }"
+		"QScrollArea, #cardHolder{ border: 1px solid rgba(130,130,130,0); background: rgba(17,17,17,0); border-radius:1px; }"
+		"#cardHolder, #grip {background: rgba(17,17,17,0); padding: 0px; margin: 0px; }"
+		"QLabel{ color: rgba(255,255,255,.9); }"
+		"QLabel#label{ padding-left: 10px; background:rgba(10,10,10,0); }"
+		"QToolButton, #back {border-radius: 1px; background: rgba(20,20,20, 0); color: rgba(250,250,250, 1); border : 0px solid rgba(20,20,20, 1); padding: 4px 6px 4px 6px ; margin-right:3px;}"
+		//     "QToolButton:hover{background: rgba(48,48,48, 1);}"
+		"QScrollBar::handle {background: rgba(40,128, 185,.9); border-radius: 4px; right: 1px; width: 8px;}"
+		"QScrollBar{border : 0px solid black; background-color: rgba(32,32,32,.1); width: 8px;padding: 1px;}"
+		"QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: rgba(200,200,200,0);}"
+		"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: rgba(0,0,0,0); border: 0px solid white;}"
+		"QScrollBar::sub-line, QScrollBar::add-line {background: rgba(10,0,0,.1);}"
+		"QPushButton{ background: rgba(20,20,20,1); border: 1px solid rgba(10,10,10,1); border-radius: 1px;  color: rgba(255,255,255,.9); padding : 3px 9px 3px 9px; }"
+		""
+		"#startBtn{ padding: 9px 19px 9px 19px; background:rgba(23,23,23,.7); border:1px solid rgba(0,0,0,0);}"
+		"#startBtn:hover, QToolButton:hover, #back:hover { background : rgba(40,128, 185,.9); }"
+		//   "QScrollArea{background: rgba(23,23,23,1); border: 0px solid black; }"
+		"#toolBar{ background: rgba(40,128, 185,0); border: 1px solid rgba(10,0,0,0); }"
+		//"#back{ background: rgba(40,128, 185,0); border: 0px solid rgba(40,40,40,0.3); }"
+		"#bottomBtn{border: 1px solid rgba(40,40,40,0.3); padding: 10px; }"
+		"#bottomBtn:hover{background: rgba(40,128, 185,0.5);}"
+		"#edit { background: rgba(17,17,17,1); margin-left :10; margin-right : 10px; border : 0px; border-bottom : 1px solid black; }"
+		"#currencyBox, #currencyBox:drop-down {background-color: rgba(33,33,33,1); border :0px; border-bottom: 1px solid black; padding-left: 10px; margin-left : 5px; }"
+		"#currencyBox QAbstractItemView {background-color: rgba(33,33,33,1); border :0px; border-bottom: 1px solid black; padding-left: 10px; margin-left : 5px; selection-background-color: rgba(40,128, 185,0); }"
+		"#currencyBox QAbstractItemView::item:hover {background-color: rgba(40,128,185,1); border :0px;  }"
+		"QMessageBox{background:rgba(33,33,33,1);}"
+		"QPushButton{background:rgba(33,33,33,0); border: 1px solid rgba(33,33,33,.5); height: 2em; Text-align:left; }"
+		"QPushButton:checked{background:rgba(33,83,233,0);}"
+		"QPushButton:hover{background:rgba(10,50,200);}"
+		"");
+}
+
+void MinerUI::configureFontIcons()
+{
+	QVariantMap options;
+	options.insert("color", QColor(52, 152, 219));
+	options.insert("color-active", QColor(52, 152, 219));
+
+	dashBtn->setIcon(fontIcon->icon(fa::play, options));
+	dashBtn->setText(tr("DashBoard"));
+	
+
+	settingsBtn->setIcon(fontIcon->icon(fa::cog, options));
+	settingsBtn->setText(tr("Miner Settings"));
+}
+
 void MinerUI::saveAndApplySettings()
 {
     walletIdText = walletEdit->text();
@@ -320,3 +380,6 @@ void MinerUI::stopMining()
     mining = false;
 }
 
+bool MinerUI::shouldAutoMine() {
+	return autoStart;
+}

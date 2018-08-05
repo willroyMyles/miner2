@@ -52,7 +52,7 @@ set(CMAKE_AUTOMOC ON)
     else()
         message(FATAL_ERROR "OpenCL NOT found: use `-DOpenCL_ENABLE=OFF` to build without OpenCL support for AMD gpu's")
     endif()
-    
+
 # This will allow a .lib to be built alongside the dll, ((needed)) for MSVC
 if(WIN32 AND MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS 1)
@@ -61,25 +61,25 @@ endif()
 
 option (BUILD_MINER_AS_LIB "if the miner is in jahshaka")
 if(BUILD_MINER_AS_LIB)
-    set(HEADERS 
+    set(HEADERS
         autominer.h
         cuda_gpu_list.h
-        minerchart.h 
-        minerui.h  
-         minerprocess.h 
+        minerchart.h
+        minerui.h
+         minerprocess.h
         ../../src/misc/QtAwesome.h
         ../../src/misc/QtAwesomeAnim.h
         ../../src/subclass/switch.h
         ../../src/constants.h
         ../../src/core/settingsmanager.h
          )
-    add_library(JahMiner 
-        main.cpp 
-        autominer.cpp 
-        cuda_gpu_list.cu 
-        minerchart.cpp 
-        minerui.cpp 
-        minerprocess.cpp 
+    add_library(JahMiner
+        main.cpp
+        autominer.cpp
+        cuda_gpu_list.cu
+        minerchart.cpp
+        minerui.cpp
+        minerprocess.cpp
         ../../src/misc/QtAwesome.cpp
         ../../src/misc/QtAwesomeAnim.cpp
         ../../src/subclass/switch.cpp
@@ -87,8 +87,11 @@ if(BUILD_MINER_AS_LIB)
         ../../src/core/settingsmanager.cpp
         ${HEADERS_moc})
 else()
-    set(HEADERS minerui.h process.h graphicscard.h)
-    add_executable(JahMiner WIN32 main.cpp minerui.cpp graphicscard.cpp ${HEADERS_moc})
+    qt5_add_resources(QRCS
+    ${CMAKE_SOURCE_DIR}/fonts.qrc
+)
+    set(HEADERS autominer.h constants.h cuda_gpu_list.h graphicscard.h minerchart.h minerui.h qtawesome.h qtawesomeanim.h settingsmanager.h minerprocess.h)
+    add_executable(JahMiner WIN32 ${QRCS} main.cpp autominer.cpp constants.cpp cuda_gpu_list.cu graphicscard.cpp minerchart.cpp minerui.cpp qtawesome.cpp qtawesomeanim.cpp settingsmanager.cpp minerprocess.cpp  ${HEADERS_moc})
 
     if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL Release)
         set(CMAKE_WIN32_EXECUTABLE ON)
@@ -100,16 +103,16 @@ set (MINER_MHTTPD_LIB "NONE" CACHE BOOL "path to libmicrohttpd .lib file")
 set (MINER_MHTTPD_INCLUDE "NONE" CACHE BOOL "path to libmicrohttpd ")
 
     #XMR-STAK
-    #set(OpenSSL_ENABLE OFF)
-    #set(HWLOC_ENABLE OFF)
-    #set(CUDA_ENABLE OFF)
-    #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xmr-stak)
-    #set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
-    #set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
-    #set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
-    #set_target_properties(xmr-stak PROPERTIES OpenSSL_ENABLE OFF)
-    #set_target_properties(xmr-stak PROPERTIES HWLOC_ENABLE OFF)
-    #set_target_properties(xmr-stak PROPERTIES CUDA_ENABLE OFF)
+    set(OpenSSL_ENABLE OFF)
+    set(HWLOC_ENABLE OFF)
+    set(CUDA_ENABLE OFF)
+   # add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xmr-stak)
+   # set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
+   # set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
+   # set_target_properties(xmr-stak PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/xmr-stak)
+   # set_target_properties(xmr-stak PROPERTIES OpenSSL_ENABLE OFF)
+   # set_target_properties(xmr-stak PROPERTIES HWLOC_ENABLE OFF)
+   # set_target_properties(xmr-stak PROPERTIES CUDA_ENABLE OFF)
 
 
 if(BUILD_MINER_AS_LIB)

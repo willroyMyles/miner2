@@ -4,6 +4,7 @@
 GraphicsCard::GraphicsCard(QWidget *parent) : QWidget(parent)
 {
     configureUI();
+	configureStyleSheet();
 }
 
 void GraphicsCard::configureUI()
@@ -26,6 +27,7 @@ void GraphicsCard::configureUI()
     box = new QCheckBox("Start Mining");
     nameHolder = new QWidget;
     nameHolderlayout = new QVBoxLayout;
+	infoHolder = new QWidget;
 
     nameHolder->setLayout(nameHolderlayout);
     nameHolderlayout->addWidget(cardName);
@@ -46,8 +48,14 @@ void GraphicsCard::configureUI()
 
     infoLayout->addWidget(graphHolder);
     infoLayout->addLayout(statusLayout);
+	infoHolder->setLayout(infoLayout);
 
     mainLayout->addWidget(nameHolder);
-    mainLayout->addLayout(infoLayout);
+	mainLayout->addWidget(infoHolder);
    // mainLayout->addLayout(statusLayout);
+}
+
+void GraphicsCard::configureStyleSheet()
+{
+	infoHolder->setStyleSheet("background:rgba(33,33,33,1);");
 }

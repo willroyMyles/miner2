@@ -25,13 +25,14 @@ private:
     QVBoxLayout *statusLayout, *nameHolderlayout;
     QHBoxLayout *infoLayout;
     QLabel *cardName;
-    QWidget *graphHolder, *nameHolder;
+    QWidget *graphHolder, *nameHolder, *infoHolder;
     QLabel *statusLabel, *poolLabel, *speedLabel;
     QCheckBox *box;
 
 
 
     void configureUI();
+	void configureStyleSheet();
 
 signals:
 

@@ -27,8 +27,14 @@ public:
     ~MinerUI();
 
     bool isMining();
+	void startMining();
+	void stopMining();
+	void restartMining();
+	bool shouldAutoMine();
+
 private:
     bool mining;
+	bool autoStart;
 
     MinerManager* minerMan;
     SettingsManager *settingsMan;
@@ -71,9 +77,10 @@ private:
     void configureConnections();
     void saveAndApplySettings();
     void restoreSettings();
-    void startMining();
-    void stopMining();
-    void restartMining();
+	void configureStyleSheet();
+	void configureFontIcons();
+
+    
 
 signals:
     void indexChanged(int);

@@ -1008,7 +1008,7 @@ bool QtAwesome::initFontAwesome( )
 #ifdef BUILD_AS_LIB
 		QFile res(":/fonts/fontawesome-4.7.0.ttf");//hack
 #else
-		QFile res("fontawesome-4.7.0.ttf");//hack
+		QFile res(":/fontawesome-4.7.0.ttf");//hack
 		qDebug() << QDir::currentPath();
 #endif
 
