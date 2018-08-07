@@ -32,8 +32,8 @@ public:
 			});
 		}
 		*/
-            this->setStyleSheet("background: url(:/grid.png);"
-                                "background-repeat: repeat-x;"
+            this->setStyleSheet("background: url(:/grid.png) repeat-x;"
+                            //    "background-repeat: repeat-x;"
                                 "");
 	}
 

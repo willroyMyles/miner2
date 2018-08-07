@@ -6,6 +6,8 @@
 #include <QStyledItemDelegate>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QPicture>
 
 MinerUI::MinerUI(QWidget *parent)
     : QWidget(parent)
@@ -18,9 +20,20 @@ MinerUI::MinerUI(QWidget *parent)
 
 MinerUI::~MinerUI()
 {
-
+    if (isMining()) stopMining();
 }
 
+
+GraphicsCard* MinerUI::addGraphicsCard(QString string)
+{
+    GraphicsCard *card = new GraphicsCard();
+    card->setCardName(string);
+    card->setObjectName(QStringLiteral("card"));
+    card->setMinimumHeight(150);
+    list.append(card);
+    scrollareaLayout->addWidget(card);
+    return card;
+}
 bool MinerUI::isMining()
 {
  return mining;
@@ -57,6 +70,12 @@ void MinerUI::configureUI()
     scrollLayout = new QVBoxLayout;
     scrollareaLayout = new QVBoxLayout;
     startBtn = new QPushButton("start");
+    navbar = new QWidget;
+    navbarLayout = new QHBoxLayout;
+    btn1 = new QPushButton;
+    btn2 = new QPushButton;
+    btn3 = new QPushButton;
+    auto btnLabel = new QLabel("");
 
     startBtn->setObjectName("start");
     dashBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
@@ -72,6 +91,7 @@ void MinerUI::configureUI()
 	settingsBtn->setAutoExclusive(true);
 	blogBtn->setAutoExclusive(true);
 	aboutBtn->setAutoExclusive(true);
+    dashBtn->setChecked(true);
 
     scrollContents->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);
 
@@ -81,6 +101,7 @@ void MinerUI::configureUI()
     auto card = new GraphicsCard();
     scrollArea->setWidgetResizable(true);
     scrollContents->setLayout(scrollLayout);
+    scrollLayout->addSpacing(30);
     scrollLayout->addWidget(card);
     scrollLayout->addWidget(new GraphicsCard());
     scrollLayout->addStretch();
@@ -95,6 +116,24 @@ void MinerUI::configureUI()
     auto adminLabel = new QLabel("If miner behaves unexpectedly, restart in admin mode");
     adminLabel->setWordWrap(true);
 
+    QFont font = adminLabel->font();
+    font.setStyleStrategy(QFont::PreferAntialias);
+    font.setWeight(32);
+    font.setPixelSize(8);
+    //font.setBold(true);
+
+    navbar->setLayout(navbarLayout);
+    navbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    navbarLayout->addWidget(btn1);
+    navbarLayout->addWidget(btn2);
+    navbarLayout->addWidget(btn3);
+
+    btnLabel->setStyleSheet("color:rgba(255,255,255,1); padding-left: 5px;");
+    btnLabel->setFont(font);
+
+    buttonLayout->addWidget(navbar);
+    buttonLayout->addWidget(btnLabel);
+
     buttonLayout->addSpacing(10);
     buttonLayout->addWidget(dashBtn);
     buttonLayout->addWidget(settingsBtn);
@@ -103,7 +142,7 @@ void MinerUI::configureUI()
     buttonLayout->addStretch();
     buttonLayout->addWidget(adminLabel);
     buttonLayout->setSpacing(3);
-    buttonLayout->setContentsMargins(15,0,0,5);
+    buttonLayout->setContentsMargins(0,0,0,5);
     buttonHolder->setLayout(buttonLayout);
     leftLayout->addWidget(buttonHolder);
     buttonHolder->setObjectName("buttonHolder");
@@ -256,6 +295,26 @@ void MinerUI::configureBlog()
 
     blogPage->setObjectName(QStringLiteral("page"));
 
+    auto widget = new QWidget;
+    auto layout = new QVBoxLayout;
+    layout->addWidget(widget);
+
+    blogPage->setLayout(layout);
+
+    auto widgetLayout = new QVBoxLayout;
+    widget->setLayout(widgetLayout);
+
+    auto visitBtn = new QPushButton("Visit Jahshaka");
+    widgetLayout->addStretch();
+    widgetLayout->addWidget(visitBtn);
+
+    widget->setStyleSheet("background: url(:/jahshaka.png) center stretch no-repeat;");
+    visitBtn->setStyleSheet("text-align:center; border: 1px solid rgba(0,0,0,.2); background:rgba(0,0,0,0.3); ");
+
+
+    connect(visitBtn,&QPushButton::clicked,[](){
+        QDesktopServices::openUrl(QUrl("http://www.jahshaka.com"));
+    });
 }
 
 void MinerUI::configureAbout()
@@ -343,8 +402,8 @@ void MinerUI::configureStyleSheet() {
 		"QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: rgba(0,0,0,0); border: 0px solid white;}"
 		"QScrollBar::sub-line, QScrollBar::add-line {background: rgba(10,0,0,.1);}"
         "QScrollArea{border:none; background:rgba(0,0,0,0); border-bottom: rgba(0,0,0,.3);}"
-        "#start{ padding: 5px 19px 5px 19px; background:rgba(23,23,23,.7); border:1px solid rgba(0,0,0,.1); }"
-        "#start:hover{ background : rgba(40,128, 185,.9); }"
+        "#start{ padding: 5px 19px 5px 19px; background:rgba(52, 152, 219,1); border:1px solid rgba(0,0,0,.1); }"
+        "#start:hover{ color : rgba(52, 152, 219,1); background: white; }"
         "#bottomBtn{border: 1px solid rgba(40,40,40,0.3); padding: 10px; text-align:center; }"
         "#bottomBtn:hover{background: rgba(20,28, 85,0.5);}"
         "#edit { background: rgba(27,27,27,1); margin-left :2; margin-right : 10px; border : 0px; border-bottom : 1px solid black; }"
@@ -352,11 +411,17 @@ void MinerUI::configureStyleSheet() {
 		"#currencyBox QAbstractItemView {background-color: rgba(33,33,33,1); border :0px; border-bottom: 1px solid black; padding-left: 10px; margin-left : 5px; selection-background-color: rgba(40,128, 185,0); }"
 		"#currencyBox QAbstractItemView::item:hover {background-color: rgba(40,128,185,1); border :0px;  }"
 		"QMessageBox{background:rgba(33,33,33,1);}"
-        "QPushButton{background:rgba(38,38,38,0); border: 1px solid rgba(33,33,33,0); height: 2em; text-align:left; }"
-        "QPushButton:checked{color:rgba(40,128, 185,0.5); font-size: 4em;}"
-        "QPushButton:hover{color:rgba(40,128, 185,0.5);}"
-        "#page{background:rgba(53,53,53,1);}"
-                  "#cardHolder{background:rgba(53,53,53,1); }");
+        "QPushButton{background:rgba(38,38,38,0); border: 1px solid rgba(33,33,33,0); height: 2em; text-align:left; padding-left: 15px; }"
+        "QPushButton:checked{color:rgba(52, 152, 219); font-size: 4em; background: rgba(13,13,13,1)}"
+        "QPushButton:hover{color:rgba(52, 152, 219);}"
+        "#page{background:rgba(13,13,13,1);}"
+        "#cardHolder{background:rgba(13,13,13,1); }"
+        "QMenu{	background: rgba(26,26,26,.9); color: rgba(250,250, 250,.9);}"
+        "QMenu::item{padding: 2px 5px 2px 20px;	}"
+        "QMenu::item:hover{	background: rgba(40,128, 185,.9);}"
+        "QMenu::item:selected{	background: rgba(40,128, 185,.9);}");
+
+
 }
 
 void MinerUI::configureFontIcons()
@@ -384,6 +449,15 @@ void MinerUI::configureFontIcons()
     //blogBtn->setIcon(fontIcon->icon(fa::rss, options));
     blogBtn->setText(tr("Forums"));
     blogBtn->setFont(font);
+
+    btn1->setText(QChar(fa::poweroff));
+    btn1->setFont(fontIcon->font(16));
+
+    btn2->setText(QChar(fa::home));
+    btn2->setFont(fontIcon->font(16));
+
+    btn3->setText(QChar(fa::bell));
+    btn3->setFont(fontIcon->font(16));
 }
 
 

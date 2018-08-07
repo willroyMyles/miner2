@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>grid.png</file>
+        <file>jahshaka.png</file>
     </qresource>
 </RCC>

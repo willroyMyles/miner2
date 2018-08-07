@@ -46,13 +46,15 @@ private:
     QWidget *buttonHolder;
     QVBoxLayout *buttonLayout;
 
-
+    QWidget *navbar;
+    QHBoxLayout *navbarLayout;
 
     QStackedWidget *stack;
 
     QWidget *dashPage, *settingsPage, *blogPage, *aboutPage;
     QPushButton *dashBtn, *settingsBtn, *blogBtn, *aboutBtn;
     QPushButton *startBtn, *confirmBtn, *cancelBtn;
+    QPushButton *btn1, *btn2, *btn3;
     GraphicsCard *card;
 
     QScrollArea *scrollArea;
@@ -67,7 +69,7 @@ private:
 
     QString walletIdText, poolText, passwordText, identifierText;
 
-
+    QList<GraphicsCard*> list;
 
     void configureUI();
     void configureDash();
@@ -78,11 +80,12 @@ private:
     void saveAndApplySettings();
     void restoreSettings();
 	void configureStyleSheet();
-	void configureFontIcons();
+    void configureFontIcons();
 
     
 
     void resetSettings();
+    GraphicsCard *addGraphicsCard(QString string);
 signals:
     void indexChanged(int);
 
