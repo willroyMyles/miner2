@@ -31,7 +31,7 @@ GraphicsCard* MinerUI::addGraphicsCard(QString string)
     card->setObjectName(QStringLiteral("card"));
     card->setMinimumHeight(150);
     list.append(card);
-    scrollareaLayout->addWidget(card);
+    scrollLayout->addWidget(card);
     return card;
 }
 bool MinerUI::isMining()
@@ -76,6 +76,7 @@ void MinerUI::configureUI()
     btn2 = new QPushButton;
     btn3 = new QPushButton;
     auto btnLabel = new QLabel("");
+	mining = false;
 
     startBtn->setObjectName("start");
     dashBtn->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
@@ -102,8 +103,8 @@ void MinerUI::configureUI()
     scrollArea->setWidgetResizable(true);
     scrollContents->setLayout(scrollLayout);
     scrollLayout->addSpacing(30);
-    scrollLayout->addWidget(card);
-    scrollLayout->addWidget(new GraphicsCard());
+    //scrollLayout->addWidget(card);
+    //scrollLayout->addWidget(new GraphicsCard());
     scrollLayout->addStretch();
     scrollArea->setWidget(scrollContents);
     scrollContents->setObjectName("cardHolder");
@@ -165,6 +166,11 @@ void MinerUI::configureUI()
     configureBlog();
     configureAbout();
 
+	for (auto process : minerMan->processes) {
+		auto card = this->addGraphicsCard(process->gpu.name);
+		card->setMinerProcess(process);
+		//card->startMining();
+	}
 }
 
 void MinerUI::configureDash()
@@ -512,18 +518,20 @@ void MinerUI::restartMining()
 
 void MinerUI::startMining()
 {
-    //foreach(card, list) card->startMining();
+	foreach(card, list) card->setOn(true);
+	foreach(card, list) card->startMining();
 
-    startBtn->setText("Stop");
-    mining = true;
+	startBtn->setText("Stop");
+	mining = true;
 }
 
 void MinerUI::stopMining()
 {
-   // foreach(card, list) card->stopMining();
+	foreach(card, list) card->setOn(false);
+	foreach(card, list) card->stopMining();
 
-    startBtn->setText("Start");
-    mining = false;
+	startBtn->setText("Start");
+	mining = false;
 }
 
 bool MinerUI::shouldAutoMine() {

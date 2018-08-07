@@ -8,6 +8,11 @@ GraphicsCard::GraphicsCard(QWidget *parent) : QWidget(parent)
     configureStyleSheet();
 }
 
+void GraphicsCard::setCardName(QString name)
+{
+	cardName->setText(name);
+}
+
 void GraphicsCard::expand()
 {
 
@@ -30,6 +35,11 @@ void GraphicsCard::setArmed(bool armed)
             process->stopMining();
             setDotColor(MinerConnection::NotConnected);
         }
+}
+
+bool GraphicsCard::getState()
+{
+	return state == CardState::Enabled;
 }
 
 void GraphicsCard::setDotColor(GraphicsCard::MinerConnection con)
@@ -143,6 +153,16 @@ void GraphicsCard::setColor(MinerConnection status) {
 
 }
 
+bool GraphicsCard::isMining()
+{
+	return process->isMining();
+}
+
+void GraphicsCard::setOn(bool value)
+{
+	on = value;
+}
+
 void GraphicsCard::configureUI()
 {
     setObjectName(QStringLiteral("card"));
@@ -216,6 +236,11 @@ void GraphicsCard::configureConnections()
         }
     });
 
+	connect(this, &GraphicsCard::cardStatus, [=](CardState state) {
+		if (state == CardState::Disabled && process && isMining()) stopMining();
+		if (state == CardState::Enabled && on) stopMining();
+		setArmed(getState());
+	});
 
 }
 
@@ -226,3 +251,4 @@ void GraphicsCard::configureStyleSheet()
                         "");
 
 }
+

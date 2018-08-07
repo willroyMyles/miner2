@@ -36,6 +36,8 @@ public:
 
         void setArmed(bool armed);
 
+		bool getState();
+
         void setDotColor(MinerConnection con);
 
         void setStarted(bool val);
@@ -50,7 +52,12 @@ public:
 
         void setColor(MinerConnection status);
 
+		bool isMining();
+
+		void setOn(bool value);
+
 private:
+	bool on;
     QVBoxLayout *mainLayout;
     QVBoxLayout *statusLayout, *nameHolderlayout;
     QHBoxLayout *infoLayout;
